@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="15"/>
+	<queryString language="SQL">
+		<![CDATA[select b.id, substring(b.nama,1,7), dt.qty, b.harga, sum(dt.qty * b.harga), u.nama, t.tanggal, (select sum(dt.qty * b.harga) from tb_detail_transaksi as dt join tb_transaksi as t on dt.id_transaksi = t.no_faktur join tb_buah as b on dt.id_buah = b.id join tb_pelanggan as p on t.id_pelanggan = p.id join tb_user as u on dt.id_user = u.id where t.no_faktur = $P{no_faktur} ) as totalH, (select $P{bayar} - sum(dt.qty * b.harga) from tb_detail_transaksi as dt join tb_transaksi as t on dt.id_transaksi = t.no_faktur join tb_buah as b on dt.id_buah = b.id join tb_pelanggan as p on t.id_pelanggan = p.id join tb_user as u on dt.id_user = u.id where t.no_faktur = $P{no_faktur} ) as kembalian from tb_detail_transaksi as dt join tb_transaksi as t on dt.id_transaksi = t.no_faktur join tb_buah as b on dt.id_buah = b.id join tb_pelanggan as p on t.id_pelanggan = p.id join tb_user as u on dt.id_user = u.id where t.no_faktur = $P{no_faktur} group by dt.id order by t.tanggal desc;]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="id_transaksi" class="java.lang.Integer"/>
+	<field name="id_buah" class="java.lang.Integer"/>
+	<field name="qty" class="java.lang.Integer"/>
+	<field name="id_user" class="java.lang.Integer"/>
+	<field name="total" class="java.lang.String"/>
+	<group name="id">
+		<groupExpression><![CDATA[$F{id}]]></groupExpression>
+	</group>
+	<group name="id_transaksi">
+		<groupExpression><![CDATA[$F{id_transaksi}]]></groupExpression>
+	</group>
+	<group name="id_buah">
+		<groupExpression><![CDATA[$F{id_buah}]]></groupExpression>
+	</group>
+	<group name="qty">
+		<groupExpression><![CDATA[$F{qty}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="122" y="15" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{id_transaksi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="41" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{id_user}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="20" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{id_buah}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="22" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch">
+			<textField>
+				<reportElement x="388" y="13" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
